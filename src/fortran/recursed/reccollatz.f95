@@ -4,25 +4,35 @@ implicit none
 interface
 
         function recursiveCollatz(collatzNum)
-                integer*16 :: recursiveCollatz
-                integer*16 :: collatzNum
+                integer*8 :: recursiveCollatz
+                integer*8 :: collatzNum
                 
         end function recursiveCollatz
+
+        subroutine bubbleSort(keyArray, otherArray)
+                integer*8, dimension(10), intent(inout) :: keyArray
+                integer*8, dimension(10), intent(inout) :: otherArray
+
+                integer*8 :: temp
+                INTEGER :: i, j
+                LOGICAL :: swapped
+
+        end subroutine bubbleSort
                 
 end interface
 
 
 
-        integer*16 :: num, j, maxNum, minNum, counter, collatzNum, minLength, tempIndex, tempNum, newIndex
-        integer*16, dimension(10) :: lengthArray
-        integer*16, dimension(10) :: magnitudeArray
+        integer*8 :: num, j, maxNum, minNum, counter, collatzNum, minLength, tempIndex, tempNum, newIndex
+        integer*8, dimension(10) :: stepArray
+        integer*8, dimension(10) :: magnitudeArray
         integer :: i, k, isSame, steps
         num = 5000000000
        
 
 
        do i=1,10
-        lengthArray(i) = 0
+        stepArray(i) = 0
         magnitudeArray(i) = 0
        end do
  
@@ -31,18 +41,18 @@ end interface
         collatzNum = num
         steps = recursiveCollatz(collatzNum)
         isSame = 0
-        minLength = lengthArray(1)
+        minLength = stepArray(1)
         minNum = 1
         newIndex = 1
         
 
         do i=1, 10
-                if( minLength > lengthArray(i) ) then
-                        minLength = lengthArray(i)
+                if( minLength > stepArray(i) ) then
+                        minLength = stepArray(i)
                         minNum  = i
                 end if
 
-                if ( lengthArray(i) == steps) then
+                if ( stepArray(i) == steps) then
                         isSame = 1
                         newIndex = i               
                 end if         
@@ -50,12 +60,12 @@ end interface
         
         j = minNum
 
-        if( steps > lengthArray(j) .and. isSame == 0) then
+        if( steps > stepArray(j) .and. isSame == 0) then
                 magnitudeArray(j) = num
-                lengthArray(j) = steps
+                stepArray(j) = steps
         end if
 
-        if( num  < lengthArray(newIndex) .and. isSame == 1) then
+        if( num  < stepArray(newIndex) .and. isSame == 1) then
                 magnitudeArray(newIndex) = num
         end if
 
@@ -63,59 +73,25 @@ end interface
         end do
 
 
-        do i=1,10
-        
-                do k= 1, 10-i
-                
-                        if(lengthArray(k) < lengthArray (k+1)) then 
-
-                                tempIndex = lengthArray(k)
-                                lengthArray(k) = lengthArray(k+1)
-                                lengthArray(k+1)= tempIndex
-                                
-
-                                tempNum = magnitudeArray(k)
-                                magnitudeArray(k) = magnitudeArray(k+1)
-                                magnitudeArray(k+1) = tempNum
-                        end if
-                end do
-        end do
+        call bubbleSort(stepArray, magnitudeArray)
         print *, "Sequence Length Array (Magnitude -> Steps)"
          
         do i=10,1,-1
-                print *,  magnitudeArray(i), lengthArray(i)
+                print *,  magnitudeArray(i), stepArray(i)
         end do
 
-        do i=1,10
-
-                do k= 1, 10-i
-
-                        if(magnitudeArray(k) < magnitudeArray (k+1)) then
-
-                                tempIndex = lengthArray(k)
-                                lengthArray(k) = lengthArray(k+1)
-                                lengthArray(k+1)= tempIndex
-
-
-                                tempNum = magnitudeArray(k)
-                                magnitudeArray(k) = magnitudeArray(k+1)
-                                magnitudeArray(k+1) = tempNum
-                        end if
-                end do
-        end do
-
-
+        call bubbleSort(magnitudeArray, stepArray)
         print *, "Magnitude Array (Magnitude -> Steps)"
 
         do i=10,1, -1
-                print *,  magnitudeArray(i), lengthArray(i)
+                print *,  magnitudeArray(i), stepArray(i)
         end do
 
 end program collatz
 
-recursive integer(kind=16) function recursiveCollatz(collatzNum) result(recsteps)
+recursive integer(kind=8) function recursiveCollatz(collatzNum) result(recsteps)
 implicit none
-            integer*16 :: collatzNum
+            integer*8 :: collatzNum
             !integer :: recsteps
             if(collatzNum == 1) then
                   recsteps = 0
@@ -126,3 +102,33 @@ implicit none
                   recsteps = recursiveCollatz(collatzNum / 2) + 1
             end if
 end function recursiveCollatz
+
+
+subroutine bubbleSort(keyArray, otherArray)
+implicit none
+        integer*8, dimension(10), intent(inout) :: keyArray
+        integer*8, dimension(10), intent(inout) :: otherArray
+
+        integer*8 :: temp
+        INTEGER :: i, j
+        LOGICAL :: swapped
+        
+
+ 
+         DO j = 10-1, 1, -1
+                swapped = .FALSE.
+                DO i = 1, j
+                        IF (keyArray(i) < keyArray(i+1)) THEN
+                                temp = keyArray(i)
+                                keyArray(i) = keyArray(i+1)
+                                keyArray(i+1) = temp
+
+                                temp = otherArray(i)
+                                otherArray(i) = otherArray(i+1)
+                                otherArray(i+1) = temp
+                                swapped = .TRUE.
+                        END IF
+                END DO
+        IF (.NOT. swapped) EXIT
+        END DO
+end subroutine bubbleSort
