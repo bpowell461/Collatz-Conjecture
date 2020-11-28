@@ -48,12 +48,15 @@ while (num != 0)
 	end
 
 	j = minNum
-	if(steps > stepArray[j] && isSame == 0)
-		magnitudeArray[j] = num
-		stepArray[j] = steps
-	end
-	if(num < stepArray[newIndex] && isSame == 1)
-		magnitudeArray[newIndex] = num
+	if(isSame == 0)
+		if(steps > stepArray[j])
+			magnitudeArray[j] = num
+			stepArray[j] = steps
+		end
+	else
+		if(num < stepArray[newIndex])
+			magnitudeArray[newIndex] = num
+		end
 	end
 	
 	global num = num - 1
