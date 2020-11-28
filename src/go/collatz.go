@@ -30,6 +30,22 @@ func bubbleSort(input []int64, other []int64) {
         }
     }
 }
+func loopCollatz(collatzNum int64) int64{
+	steps = 0
+	for (collatzNum != 1){
+			if(collatzNum%2 == 1){
+				collatzNum = (collatzNum*3)+1
+
+			} else {
+
+				collatzNum = (collatzNum/2)
+			}
+		
+			steps = steps + 1
+		}
+
+	return steps
+}
 
 func main(){
 
@@ -42,20 +58,9 @@ func main(){
 		minNum = 0
 		IsSame = false
 		minSteps = stepArray[0]
-		steps = 0
+		steps = loopCollatz(collatzNum)
 		newIndex = 0
 
-		for (collatzNum != 1){
-			if(collatzNum%2 == 1){
-				collatzNum = (collatzNum*3)+1
-
-			} else {
-
-				collatzNum = (collatzNum/2)
-			}
-		
-			steps = steps + 1
-		}
 		for i = 0; i < 10; i++{
 			if(minSteps > stepArray[i]){
 				minSteps = stepArray[i]
@@ -70,12 +75,15 @@ func main(){
 
 		j = minNum
 		/*fmt.Println(IsSame)*/
-		if(steps > stepArray[j] && !IsSame){
+		if(!IsSame){
+		if(steps > stepArray[j]){
 			magnitudeArray[j] = num
 			stepArray[j] = steps
 		}
-		if(num < stepArray[newIndex] && IsSame){
-			magnitudeArray[newIndex] = num
+		}else{
+			if(num < stepArray[newIndex]){
+				magnitudeArray[newIndex] = num
+			}
 		}
 		num = num -1
 	}
