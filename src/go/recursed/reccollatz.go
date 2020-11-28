@@ -70,12 +70,15 @@ func main(){
 
 		j = minNum
 		/*fmt.Println(IsSame)*/
-		if(steps > stepArray[j] && !IsSame){
+		if(!IsSame){
+		if(steps > stepArray[j]){
 			magnitudeArray[j] = num
 			stepArray[j] = steps
 		}
-		if(num < stepArray[newIndex] && IsSame){
-			magnitudeArray[newIndex] = num
+		}else{
+			if(num < stepArray[newIndex]){
+				magnitudeArray[newIndex] = num
+			}
 		}
 		num = num -1
 	}
