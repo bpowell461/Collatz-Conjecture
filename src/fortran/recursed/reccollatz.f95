@@ -31,56 +31,56 @@ end interface
        
 
 
-       do i=1,10
-        stepArray(i) = 0
+        do i=1,10
+        stepArray(i) = 0      !initializing arrays to hold 0 for comparisons
         magnitudeArray(i) = 0
        end do
  
        do while (num .ne. 0)
         
         collatzNum = num
-        steps = recursiveCollatz(collatzNum)
-        isSame = 0
-        minLength = stepArray(1)
-        minNum = 1
-        newIndex = 1
-        
+        steps = recursiveCollatz(collatzNum) !num and amount of steps in sequence
+        isSame = 0                      !duplicate checker
+        minLength = stepArray(1)        !smallest steps in seq.
+        minNum = 1                      !smallest number in seq.
+        newIndex = 1                    !used for replacing minimum steps and num
 
         do i=1, 10
-                if( minLength > stepArray(i) ) then
-                        minLength = stepArray(i)
+                if( minLength > stepArray(i) ) then         !Is the current num steps greater than the steps in the seq.?
                         minNum  = i
+                        minLength = stepArray(i)
                 end if
 
-                if ( stepArray(i) == steps) then
+                if ( stepArray(i) == steps) then        !Do the numbers have the same amount of steps? Take the smaller number. 
                         isSame = 1
                         newIndex = i               
                 end if         
         end do
         
-        j = minNum
-
-        if( steps > stepArray(j) .and. isSame == 0) then
-                magnitudeArray(j) = num
+        j = minNum                                      !Index to replace with the smaller number
+        
+        if(isSame == 0) then                            !Is it not the same?
+            if( steps > stepArray(j)) then
+                magnitudeArray(j) = num                 !Place in array accordingly
                 stepArray(j) = steps
+            end if
+        else 
+            if( num  < stepArray(newIndex)) then
+                magnitudeArray(newIndex) = num          !If it is the same then place the newest number, which will be smaller
+            end if
         end if
-
-        if( num  < stepArray(newIndex) .and. isSame == 1) then
-                magnitudeArray(newIndex) = num
-        end if
-
         num = num - 1
         end do
 
 
-        call bubbleSort(stepArray, magnitudeArray)
+        call bubbleSort(stepArray, magnitudeArray)      !Sort array and print
         print *, "Sequence Length Array (Magnitude -> Steps)"
          
         do i=10,1,-1
                 print *,  magnitudeArray(i), stepArray(i)
         end do
 
-        call bubbleSort(magnitudeArray, stepArray)
+        call bubbleSort(magnitudeArray, stepArray)      !Sort array and print
         print *, "Magnitude Array (Magnitude -> Steps)"
 
         do i=10,1, -1
@@ -88,6 +88,7 @@ end interface
         end do
 
 end program collatz
+
 
 recursive integer(kind=8) function recursiveCollatz(collatzNum) result(recsteps)
 implicit none
