@@ -6,7 +6,19 @@ function bubblesort(keyArray, otherArray) #rosetta code implementation of bubble
         end
     end
 end
+function loopCollatz(collatzNum)
+	steps = 0
+	while(collatzNum != 1)
+		if(collatzNum % 2 == 1)
 
+			 collatzNum = (collatzNum*3)+1
+		else
+			collatzNum = collatzNum/2
+		end
+		steps=steps+1
+	end
+	return steps
+end
 global num = 5000000000
 
 stepArray = [0,0,0,0,0,0,0,0,0,0]
@@ -20,22 +32,12 @@ while (num != 0)
 	minNum = 1
 	minSteps = stepArray[1]
 
-	steps = 0
+	steps = loopCollatz(collatzNum)
 
 	newIndex = 1
 
-	while(collatzNum != 1)
-		if(collatzNum % 2 == 1)
-
-			 collatzNum = (collatzNum*3)+1
-		else
-			collatzNum = collatzNum/2
-		end
-		steps=steps+1
-	end
 	for i = 1:10
 		if(minSteps > stepArray[i])
-
 			minSteps = stepArray[i]
 			minNum = i
 		end
@@ -47,14 +49,16 @@ while (num != 0)
 	end
 
 	j = minNum
-	if(steps > stepArray[j] && isSame == 0)
-		magnitudeArray[j] = num
-		stepArray[j] = steps
+	if(isSame == 0)
+		if(steps > stepArray[j])
+			magnitudeArray[j] = num
+			stepArray[j] = steps
+		end
+	else
+		if(num < stepArray[newIndex])
+			magnitudeArray[newIndex] = num
+		end
 	end
-	if(num < stepArray[newIndex] && isSame == 1)
-		magnitudeArray[newIndex] = num
-	end
-	
 	global num = num - 1
 
 end
